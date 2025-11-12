@@ -41,9 +41,8 @@
     text-align: center;
   }
   
-  /* --- Stile Titolo (AGGIORNATO) --- */
+  /* --- Stile Titolo (Bubblegum) --- */
   h1 {
-    /* NUOVO FONT: Bubblegum Sans */
     font-family: 'Bubblegum Sans', cursive;
     margin-bottom: 5px; 
     font-size: 40px; 
@@ -51,16 +50,15 @@
     line-height: 1.1;
   }
   
-  /* --- Stile Sottotitolo (AGGIORNATO) --- */
+  /* --- Stile Sottotitolo (Bubblegum) --- */
   p {
-    /* NUOVO FONT: Bubblegum Sans */
     font-family: 'Bubblegum Sans', cursive;
     font-size: 20px;
     color: #555;
     margin-bottom: 25px; 
   }
 
-  /* --- Stile Domanda --- */
+  /* --- Stile Domanda (Montserrat) --- */
   #questionContainer {
     font-weight: 800; 
     font-size: 22px; 
@@ -68,18 +66,19 @@
     color: #333;
   }
   
-  /* --- Stile Risposte (Spaziatura) --- */
+  /* --- Stile Risposte (Spaziatura Forzata) --- */
   .choices {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Spazio aumentato */
+    /* Spaziatura forzata per bypassare la cache */
+    gap: 25px !important; 
     width: 100%;
   }
   button.choice {
     background: #ffe3ec;
     border: 2px solid transparent;
     border-radius: 10px;
-    padding: 14px; 
+    padding: 16px; 
     font-size: 15px;
     cursor: pointer;
     transition: 0.2s;
