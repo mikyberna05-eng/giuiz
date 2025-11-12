@@ -5,26 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Benvenuti nel Giuiz 🎓</title>
 <style>
+  /* --- Stili Animazioni (NUOVO) --- */
+  @keyframes fireworks {
+    0% { transform: scale(0.5) translateY(0); opacity: 1; }
+    100% { transform: scale(1.5) translateY(-100px); opacity: 0; }
+  }
+  
+  @keyframes brokenHeart {
+    0% { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(150px) rotate(20deg); opacity: 0; }
+  }
+
+  /* --- Stili Esistenti (Modificati) --- */
   body {
     font-family: "Poppins", sans-serif;
-    /* Sfondo cicogne/bebè/ciucci */
     background: url('sfondo-cicogne.jpg') center/cover no-repeat;
     margin: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    /* Modificato per centrare verticalmente */
+    align-items: center; 
     min-height: 100vh;
     padding: 20px;
+    box-sizing: border-box; /* Aggiunto per un padding migliore */
   }
   .container {
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.9); /* Sfondo leggermente più opaco */
     border-radius: 16px;
     padding: 24px;
     max-width: 600px;
     width: 100%;
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     text-align: center;
-    margin-top: 30px;
+    /* Rimosso margin-top, ci pensa flexbox ora */
   }
   h1 {
     margin-bottom: 10px;
@@ -43,15 +56,20 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    /* Aggiunto per fare spazio */
+    width: 100%;
   }
   button.choice {
     background: #ffe3ec;
     border: 2px solid transparent;
     border-radius: 10px;
-    padding: 10px;
+    padding: 12px; /* Un po' più di spazio */
     font-size: 15px;
     cursor: pointer;
     transition: 0.2s;
+    /* Aggiunto per farli occupare tutta la larghezza */
+    width: 100%;
+    box-sizing: border-box;
   }
   button.choice:hover {
     background: #ffd2e1;
@@ -60,6 +78,19 @@
     border-color: #ff4b5c;
     background: #ffc1d6;
   }
+  
+  /* --- Stili per Risposte (NUOVO) --- */
+  button.choice.correct {
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    border-color: #4CAF50;
+  }
+  button.choice.incorrect {
+    background-color: #f44336; /* Rosso */
+    color: white;
+    border-color: #f44336;
+  }
+  
   #nextBtn {
     margin-top: 20px;
     background: #ff4b5c;
@@ -74,6 +105,14 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+  
+  /* --- Stili Risultato (Modificati) --- */
+  #resultContainer {
+    /* Aggiunto per contenere gli effetti speciali */
+    position: relative;
+    overflow: hidden;
+    padding: 10px; /* Spazio per gli effetti */
+  }
   .result {
     font-size: 20px;
     font-weight: 600;
@@ -84,6 +123,15 @@
     font-size: 50px;
     margin-top: 10px;
   }
+  /* Stile per le particelle (NUOVO) */
+  .particle {
+    position: absolute;
+    font-size: 24px;
+    animation-iteration-count: 1;
+    /* Rimuove le particelle dal click */
+    pointer-events: none; 
+  }
+  
   #restart {
     margin-top: 20px;
     background: #4CAF50;
@@ -93,6 +141,8 @@
     border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
+    z-index: 10; /* Per stare sopra gli effetti */
+    position: relative;
   }
 </style>
 </head>
@@ -114,7 +164,7 @@ const questions = [
   {q:"Che frutto è nel gruppo Macedonia?",a:["cocco","limone","fragola","mirtillo ✅"]},
   {q:"Qual è il suo drink preferito?",a:["Long island ✅","Spritz","Hugo","Negroni"]},
   {q:"Quanti capezzoli ha Giulia?",a:["uno","due","quattro ✅","non ne ha"]},
-  {q:"Qual è il suo piatto preferito al sushi?",a:["tempura di gamberi","gunkan ✅","sashimi","tutto sbagliato, non mangia pesce"]},
+  {qG:"Qual è il suo piatto preferito al sushi?",a:["tempura di gamberi","gunkan ✅","sashimi","tutto sbagliato, non mangia pesce"]},
   {q:"In macchina al massimo a che marcia arriva?",a:["non guida con il cambio manuale","non ha limiti","terza ✅","quarta"]},
   {q:"Cosa deve bere Giulia per correre al wc?",a:["cocacola","tisana ai frutti di bosco","caffè","latte ✅"]},
   {q:"Qual è la sua macchina dei sogni?",a:["Cinquecento","Tiguan","Tesla","Defender ✅"]},
@@ -157,17 +207,43 @@ function selectAnswer(button, isCorrect) {
   nextBtn.disabled = false;
 }
 
+// --- LOGICA "AVANTI" MODIFICATA ---
 nextBtn.onclick = () => {
   const selected = cContainer.querySelector(".selected");
-  if(selected && selected.dataset.correct === "true") score++;
-  current++;
-  if(current < questions.length) {
-    showQuestion();
+  if (!selected) return;
+
+  const isCorrect = selected.dataset.correct === "true";
+  nextBtn.disabled = true; // Disabilita subito il tasto
+  
+  // Blocca tutti i bottoni e mostra la risposta giusta
+  Array.from(cContainer.children).forEach((button, index) => {
+    button.style.pointerEvents = "none"; // Blocca il click
+    
+    // Mostra la risposta corretta in verde
+    if (questions[current].a[index].includes("✅")) {
+      button.classList.add("correct");
+    }
+  });
+
+  if (isCorrect) {
+    score++;
   } else {
-    showResult();
+    // Se sbagliata, colora la selezione di rosso
+    selected.classList.add("incorrect"); 
   }
+  
+  // Aggiungi un ritardo per far vedere la risposta
+  setTimeout(() => {
+    current++; // Vai alla prossima domanda
+    if (current < questions.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }, 1500); // 1.5 secondi di pausa
 };
 
+// --- LOGICA "RISULTATO" MODIFICATA ---
 function showResult() {
   qContainer.textContent = "";
   cContainer.innerHTML = "";
@@ -175,15 +251,20 @@ function showResult() {
 
   let message = "";
   let emoji = "";
+  let effectType = ""; // Per gli effetti speciali
+
   if(score >= 11) {
     message = "🎉 Complimenti! Mi conosci stra bene!";
     emoji = "😎";
+    effectType = "fireworks";
   } else if(score >= 6) {
     message = "🤔 Potevi fare meglio!";
     emoji = "😅";
+    effectType = "none";
   } else {
     message = "😤 Vergognati!";
     emoji = "💀";
+    effectType = "brokenHeart";
   }
 
   resultContainer.innerHTML = `
@@ -192,12 +273,39 @@ function showResult() {
     <button id="restart">Ricomincia 🔁</button>
   `;
   document.getElementById("restart").onclick = restartQuiz;
+
+  // --- Esegui Effetti Speciali ---
+  if(effectType === "fireworks") {
+    // Genera 30 "fuochi d'artificio"
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = '✨';
+      p.style.left = `${Math.random() * 100}%`;
+      p.style.top = `${Math.random() * 50 + 50}%`; // Parte dal basso
+      p.style.animation = `fireworks 1.2s ease-out ${Math.random() * 0.8}s forwards`;
+      resultContainer.prepend(p);
+    }
+  } else if (effectType === "brokenHeart") {
+    // Genera 20 cuori spezzati che cadono
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = '💔';
+      p.style.left = `${Math.random() * 100}%`;
+      p.style.top = '-10%'; // Parte dall'alto
+      p.style.animation = `brokenHeart 2.5s ease-in ${Math.random() * 2}s forwards`;
+      resultContainer.prepend(p);
+    }
+  }
 }
 
 function restartQuiz() {
   current = 0;
   score = 0;
   nextBtn.style.display = "inline-block";
+  // Pulisce il contenitore (rimuovendo anche le particelle)
+  resultContainer.innerHTML = ""; 
   showQuestion();
 }
 
