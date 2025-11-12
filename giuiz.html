@@ -4,8 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Benvenuti nel Giuiz 🎓</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
-  /* --- Stili Animazioni (NUOVO) --- */
+  /* --- Stili Animazioni --- */
   @keyframes fireworks {
     0% { transform: scale(0.5) translateY(0); opacity: 1; }
     100% { transform: scale(1.5) translateY(-100px); opacity: 0; }
@@ -16,60 +19,80 @@
     100% { transform: translateY(150px) rotate(20deg); opacity: 0; }
   }
 
-  /* --- Stili Esistenti (Modificati) --- */
+  /* --- Stili Base (Modificati) --- */
   body {
-    font-family: "Poppins", sans-serif;
+    /* NUOVO: Usiamo Montserrat come font base */
+    font-family: "Montserrat", sans-serif;
     background: url('sfondo-cicogne.jpg') center/cover no-repeat;
     margin: 0;
     display: flex;
     justify-content: center;
-    /* Modificato per centrare verticalmente */
     align-items: center; 
     min-height: 100vh;
     padding: 20px;
-    box-sizing: border-box; /* Aggiunto per un padding migliore */
+    box-sizing: border-box; 
   }
   .container {
-    background: rgba(255,255,255,0.9); /* Sfondo leggermente più opaco */
+    background: rgba(255,255,255,0.9);
     border-radius: 16px;
     padding: 24px;
     max-width: 600px;
     width: 100%;
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     text-align: center;
-    /* Rimosso margin-top, ci pensa flexbox ora */
   }
+  
+  /* --- Stile Titolo (Modificato) --- */
   h1 {
-    margin-bottom: 10px;
-    font-size: 28px;
+    /* NUOVO FONT e dimensione più grande */
+    font-family: 'Kalam', cursive;
+    margin-bottom: 5px; 
+    font-size: 40px; 
     color: #ff4b5c;
+    line-height: 1.1;
   }
+  
+  /* --- Stile Sottotitolo (Modificato) --- */
   p {
+    /* NUOVO FONT e dimensione più grande */
+    font-family: 'Kalam', cursive;
+    font-size: 20px;
     color: #555;
+    margin-bottom: 25px; /* Separato un po' di più */
+  }
+
+  /* --- Stile Domanda (Modificato) --- */
+  #questionContainer {
+    font-weight: 800; /* Più spesso */
+    font-size: 22px; /* Più grande */
     margin-bottom: 20px;
+    color: #333;
   }
+  
   .question {
-    font-weight: 600;
-    margin-bottom: 15px;
+    /* Rimosso, usiamo #questionContainer */
   }
+
+  /* --- Stile Risposte (Modificato per separazione) --- */
   .choices {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    /* Aggiunto per fare spazio */
+    /* NUOVO: Spazio aumentato da 10px a 15px */
+    gap: 15px;
     width: 100%;
   }
   button.choice {
     background: #ffe3ec;
     border: 2px solid transparent;
     border-radius: 10px;
-    padding: 12px; /* Un po' più di spazio */
+    /* Aumento del padding per separare visivamente */
+    padding: 14px; 
     font-size: 15px;
     cursor: pointer;
     transition: 0.2s;
-    /* Aggiunto per farli occupare tutta la larghezza */
     width: 100%;
     box-sizing: border-box;
+    font-weight: 600; /* Risposte più leggibili */
   }
   button.choice:hover {
     background: #ffd2e1;
@@ -79,14 +102,14 @@
     background: #ffc1d6;
   }
   
-  /* --- Stili per Risposte (NUOVO) --- */
+  /* --- Stili per Risposte Corretta/Errata --- */
   button.choice.correct {
-    background-color: #4CAF50; /* Verde */
+    background-color: #4CAF50;
     color: white;
     border-color: #4CAF50;
   }
   button.choice.incorrect {
-    background-color: #f44336; /* Rosso */
+    background-color: #f44336;
     color: white;
     border-color: #f44336;
   }
@@ -106,12 +129,11 @@
     cursor: not-allowed;
   }
   
-  /* --- Stili Risultato (Modificati) --- */
+  /* --- Stili Risultato --- */
   #resultContainer {
-    /* Aggiunto per contenere gli effetti speciali */
     position: relative;
     overflow: hidden;
-    padding: 10px; /* Spazio per gli effetti */
+    padding: 10px; 
   }
   .result {
     font-size: 20px;
@@ -123,12 +145,10 @@
     font-size: 50px;
     margin-top: 10px;
   }
-  /* Stile per le particelle (NUOVO) */
   .particle {
     position: absolute;
     font-size: 24px;
     animation-iteration-count: 1;
-    /* Rimuove le particelle dal click */
     pointer-events: none; 
   }
   
@@ -141,7 +161,7 @@
     border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
-    z-index: 10; /* Per stare sopra gli effetti */
+    z-index: 10;
     position: relative;
   }
 </style>
@@ -164,7 +184,7 @@ const questions = [
   {q:"Che frutto è nel gruppo Macedonia?",a:["cocco","limone","fragola","mirtillo ✅"]},
   {q:"Qual è il suo drink preferito?",a:["Long island ✅","Spritz","Hugo","Negroni"]},
   {q:"Quanti capezzoli ha Giulia?",a:["uno","due","quattro ✅","non ne ha"]},
-  {qG:"Qual è il suo piatto preferito al sushi?",a:["tempura di gamberi","gunkan ✅","sashimi","tutto sbagliato, non mangia pesce"]},
+  {q:"Qual è il suo piatto preferito al sushi?",a:["tempura di gamberi","gunkan ✅","sashimi","tutto sbagliato, non mangia pesce"]},
   {q:"In macchina al massimo a che marcia arriva?",a:["non guida con il cambio manuale","non ha limiti","terza ✅","quarta"]},
   {q:"Cosa deve bere Giulia per correre al wc?",a:["cocacola","tisana ai frutti di bosco","caffè","latte ✅"]},
   {q:"Qual è la sua macchina dei sogni?",a:["Cinquecento","Tiguan","Tesla","Defender ✅"]},
@@ -207,19 +227,16 @@ function selectAnswer(button, isCorrect) {
   nextBtn.disabled = false;
 }
 
-// --- LOGICA "AVANTI" MODIFICATA ---
 nextBtn.onclick = () => {
   const selected = cContainer.querySelector(".selected");
   if (!selected) return;
 
   const isCorrect = selected.dataset.correct === "true";
-  nextBtn.disabled = true; // Disabilita subito il tasto
+  nextBtn.disabled = true; 
   
-  // Blocca tutti i bottoni e mostra la risposta giusta
   Array.from(cContainer.children).forEach((button, index) => {
-    button.style.pointerEvents = "none"; // Blocca il click
+    button.style.pointerEvents = "none";
     
-    // Mostra la risposta corretta in verde
     if (questions[current].a[index].includes("✅")) {
       button.classList.add("correct");
     }
@@ -228,22 +245,19 @@ nextBtn.onclick = () => {
   if (isCorrect) {
     score++;
   } else {
-    // Se sbagliata, colora la selezione di rosso
     selected.classList.add("incorrect"); 
   }
   
-  // Aggiungi un ritardo per far vedere la risposta
   setTimeout(() => {
-    current++; // Vai alla prossima domanda
+    current++; 
     if (current < questions.length) {
       showQuestion();
     } else {
       showResult();
     }
-  }, 1500); // 1.5 secondi di pausa
+  }, 1500); 
 };
 
-// --- LOGICA "RISULTATO" MODIFICATA ---
 function showResult() {
   qContainer.textContent = "";
   cContainer.innerHTML = "";
@@ -251,7 +265,7 @@ function showResult() {
 
   let message = "";
   let emoji = "";
-  let effectType = ""; // Per gli effetti speciali
+  let effectType = ""; 
 
   if(score >= 11) {
     message = "🎉 Complimenti! Mi conosci stra bene!";
@@ -274,26 +288,23 @@ function showResult() {
   `;
   document.getElementById("restart").onclick = restartQuiz;
 
-  // --- Esegui Effetti Speciali ---
   if(effectType === "fireworks") {
-    // Genera 30 "fuochi d'artificio"
     for (let i = 0; i < 30; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       p.textContent = '✨';
       p.style.left = `${Math.random() * 100}%`;
-      p.style.top = `${Math.random() * 50 + 50}%`; // Parte dal basso
+      p.style.top = `${Math.random() * 50 + 50}%`; 
       p.style.animation = `fireworks 1.2s ease-out ${Math.random() * 0.8}s forwards`;
       resultContainer.prepend(p);
     }
   } else if (effectType === "brokenHeart") {
-    // Genera 20 cuori spezzati che cadono
     for (let i = 0; i < 20; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       p.textContent = '💔';
       p.style.left = `${Math.random() * 100}%`;
-      p.style.top = '-10%'; // Parte dall'alto
+      p.style.top = '-10%'; 
       p.style.animation = `brokenHeart 2.5s ease-in ${Math.random() * 2}s forwards`;
       resultContainer.prepend(p);
     }
@@ -304,7 +315,6 @@ function restartQuiz() {
   current = 0;
   score = 0;
   nextBtn.style.display = "inline-block";
-  // Pulisce il contenitore (rimuovendo anche le particelle)
   resultContainer.innerHTML = ""; 
   showQuestion();
 }
