@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Benvenuti nel Giuiz 🎓</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
   /* --- Stili Animazioni --- */
@@ -19,9 +19,8 @@
     100% { transform: translateY(150px) rotate(20deg); opacity: 0; }
   }
 
-  /* --- Stili Base (Modificati) --- */
+  /* --- Stili Base --- */
   body {
-    /* NUOVO: Usiamo Montserrat come font base */
     font-family: "Montserrat", sans-serif;
     background: url('sfondo-cicogne.jpg') center/cover no-repeat;
     margin: 0;
@@ -42,57 +41,51 @@
     text-align: center;
   }
   
-  /* --- Stile Titolo (Modificato) --- */
+  /* --- Stile Titolo (AGGIORNATO) --- */
   h1 {
-    /* NUOVO FONT e dimensione più grande */
-    font-family: 'Kalam', cursive;
+    /* NUOVO FONT: Bubblegum Sans */
+    font-family: 'Bubblegum Sans', cursive;
     margin-bottom: 5px; 
     font-size: 40px; 
     color: #ff4b5c;
     line-height: 1.1;
   }
   
-  /* --- Stile Sottotitolo (Modificato) --- */
+  /* --- Stile Sottotitolo (AGGIORNATO) --- */
   p {
-    /* NUOVO FONT e dimensione più grande */
-    font-family: 'Kalam', cursive;
+    /* NUOVO FONT: Bubblegum Sans */
+    font-family: 'Bubblegum Sans', cursive;
     font-size: 20px;
     color: #555;
-    margin-bottom: 25px; /* Separato un po' di più */
+    margin-bottom: 25px; 
   }
 
-  /* --- Stile Domanda (Modificato) --- */
+  /* --- Stile Domanda --- */
   #questionContainer {
-    font-weight: 800; /* Più spesso */
-    font-size: 22px; /* Più grande */
+    font-weight: 800; 
+    font-size: 22px; 
     margin-bottom: 20px;
     color: #333;
   }
   
-  .question {
-    /* Rimosso, usiamo #questionContainer */
-  }
-
-  /* --- Stile Risposte (Modificato per separazione) --- */
+  /* --- Stile Risposte (Spaziatura) --- */
   .choices {
     display: flex;
     flex-direction: column;
-    /* NUOVO: Spazio aumentato da 10px a 15px */
-    gap: 15px;
+    gap: 15px; /* Spazio aumentato */
     width: 100%;
   }
   button.choice {
     background: #ffe3ec;
     border: 2px solid transparent;
     border-radius: 10px;
-    /* Aumento del padding per separare visivamente */
     padding: 14px; 
     font-size: 15px;
     cursor: pointer;
     transition: 0.2s;
     width: 100%;
     box-sizing: border-box;
-    font-weight: 600; /* Risposte più leggibili */
+    font-weight: 600; 
   }
   button.choice:hover {
     background: #ffd2e1;
